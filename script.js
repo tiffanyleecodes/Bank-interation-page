@@ -61,10 +61,12 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
 
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `
@@ -179,210 +181,41 @@ btnTransfer.addEventListener('click', function (e) {
   updateUI(currentAccount);
 });
 
-//The ?. operator checks if currentAccount is not null or undefined, and only if it is not null or undefined, it tries to access the pin property of the object. If currentAccount is null or undefined, the expression will return undefined without throwing an error.
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
 
-/////////////////////////////////////////////////
-/////////////////////////////////////////////////
-// LECTURES
+  if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
+    currentAccount.movements.push(amount);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+    //update UI
+    updateUI(currentAccount);
+  }
 
-// const currencies = new Map([
-//   ['USD', 'United States dollar'],
-//   ['EUR', 'Euro'],
-//   ['GBP', 'Pound sterling'],
-// ]);
+  inputLoanAmount.value = '';
+});
 
-// currencies.forEach(function (value, key, map) {
-//   console.log(`${key}: ${value}`);
-// });
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
 
-// //set
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    console.log(index);
+    accounts.splice(index, 1);
+    containerApp.style.opacity = '0';
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+  labelWelcome.textContent = 'Login to get started';
+});
 
-// const currenciesUnique = new Set(['USD', 'GBP', 'USD', 'EUR', 'EUR']);
-
-// console.log(currenciesUnique);
-// currenciesUnique.forEach(function (value, _, map) {
-//   console.log(`${value}: ${value}`);
-// });
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-/////////////////////////////////////////////////
-// let arr = ['a', 'b', 'c', 'd', 'e'];
-
-// //slice method /
-// console.log(arr.slice(-3)); // 'c' , 'd' ,'e'
-// console.log(arr.slice(-2)); // 'd' ,'e'
-// console.log(arr.slice(1, -2)); // 'b' , 'c'
-// console.log(arr.slice());
-// console.log([...arr]);
-
-//splice
-// console.log(arr.splice(2)); // 'c' , 'd' ,'e'  deleted part
-// console.log(arr); // 'a','b' remaining part
-// console.log(arr.splice(-1)); // 'e'
-// console.log(arr); //'a','b' ,'c' , 'd'
-
-// console.log(arr.splice(1, 2)); // b' ,'c'
-// console.log(arr); //'a', 'd','e'
-
-// // reverse
-// arr = ['a', 'b', 'c', 'd', 'e'];
-// const arr2 = ['j', 'i', 'h', 'g', 'f'];
-// console.log(arr2.reverse()); // 'f', 'g', 'h', 'i','j'
-// console.log(arr2); // mutate **
-
-// // concat
-// const letters = arr.concat(arr2);
-// console.log(letters);
-// console.log([...arr, ...arr2]);
-
-// // Join
-// console.log(letters.join('~~~'));
-
-//
-
-// const arr = [23, 11, 64];
-// console.log(arr[0]);
-// console.log(arr.at(0));
-
-// // getting last array element
-// console.log(arr[arr.length - 1]);
-// console.log(arr.slice(-1)[0]); // [0] remove []
-// console.log(arr.at(-1)); //at() method is used to get the element at a specified index in an array. it also works on string
-
-// console.log('jonas'.at(0)); //j
-// console.log('jonas'.at(-1)); //i
-// const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
-// for (const [i, movement] of movements.entries()) {
-//   if (movement > 0) {
-//     console.log(`Movement ${i + 1} :You deposited ${movement}`);
-//   } else {
-//     console.log(`Movement ${i + 1} :You withdraw ${Math.abs(movement)}`);
-//   }
-// }
-// console.log('--------------');
-
-// movements.forEach(function (mov, i, arr) {
-//   if (mov > 0) {
-//     console.log(`Movement ${i + 1} :You deposited ${mov}`);
-//   } else {
-//     console.log(`Movement ${i + 1} :You withdraw ${Math.abs(mov)}`);
-//   }
-// });
-
-// challenge
-//  const checkDogs = function (dogsJulia, dogsKate) {
-//   const dogsJuliaCorrected = dogsJulia.slice();
-//   dogsJuliaCorrected.splice(0, 1);
-//   dogsJuliaCorrected.splice(-2);
-
-//   const dogs = dogsJuliaCorrected.concat(dogsKate);
-//   console.log(dogs);
-
-//   dogs.forEach(function (dog, i) {
-//     if (dog >= 3) {
-//       console.log(`Dog number ${i + 1} is an adult, and is ${dog} years old`);
-//     } else {
-//       console.log(`Dog number ${i + 1} is still a puppy`);
-//     }
-//   });
-// };
-
-// checkDogs([3, 5, 2, 12, 7], [4, 1, 15, 8, 3]);
-
-// const calAverageHumanAge = function (ages) {
-//   const humanAges = ages.map(age => (age <= 2 ? 2 * age : 16 + age * 4));
-//   const adults = humanAges.filter(age => age >= 18);
-//   console.log(humanAges);
-//   console.log(adults);
-
-//   const average = adults.reduce(
-//     (acc, age, i, arr) => acc + age / arr.length,
-//     0
-//   );
-//   return average;
-// };
-
-// const calAverageHumanAge = ages =>
-//   ages
-//     .map(age => (age <= 2 ? 2 * age : 16 + age * 4))
-//     .filter(age => age >= 18)
-//     .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
-
-// const avg1 = calAverageHumanAge([3, 5, 4, 1, 15, 8, 3]);
-
-// console.log(avg1);
-// const eurToUsd = 1.1;
-
-// // const movementsUsd = movements.map(function (mov) {
-// //   return mov * eurToUsd;
-// // });
-
-// const movementsUsd = movements.map(mov => mov * eurToUsd);
-
-// console.log(movements);
-// console.log(movementsUsd);
-
-// const movementsUSDfor = [];
-
-// for (const mov of movements) movementsUSDfor.push(mov * eurToUsd);
-// console.log(movementsUSDfor);
-
-// const movementsDescriptions = movements.map(
-//   (mov, i) =>
-//     `Movement ${i + 1}:You ${mov > 0 ? 'deposited' : 'withdraw'} ${Math.abs(
-//       mov
-//     )}`
-// );
-
-// console.log(movementsDescriptions);
-
-// const deposits = movements.filter(function (mov) {
-//   return mov > 0;
-// });
-
-// const withdraws = movements.filter(function (mov) {
-//   return mov < 0;
-// });
-
-// console.log(movements);
-// console.log(deposits);
-// console.log(withdraws);
-
-// const depositsFor = [];
-// for (const mov of movements) if (mov > 0) depositsFor.push(mov);
-// console.log(depositsFor);
-
-// const withdrawFor = [];
-// for (const mov of movements) if (mov < 0) withdrawFor.push(mov);
-// console.log(withdrawFor);
-
-// console.log(movements);
-
-// //accumulator => snowball
-// const balance = movements.reduce((acc, cur) => acc + cur, 0);
-// console.log(balance);
-
-// let balance2 = 0;
-// for (const mov of movements) balance2 += mov;
-// console.log(balance2);
-
-// // Maximum value
-
-// const max = movements.reduce((acc, mov) => {
-//   if (acc > mov) return acc;
-//   else return mov;
-// }, movements[0]);
-// console.log(max);
-
-// const firstWithdrawal = movements.find(mov => mov < 0);
-// console.log(movements);
-// console.log(firstWithdrawal);
-
-// console.log(accounts);
-
-// const account = accounts.find(acc => acc.owner === 'Jessica Davis');
-
-// console.log(account);
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
