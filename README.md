@@ -1,6 +1,6 @@
 # Bank interaion page
 
-- Live Site URL: [Live site](https://tiffanyleecodes.github.io/Bank-interation-page/)
+- Live Site URL: [Live site](https://your-live-site-url.com)
 
 ### Overview
 
@@ -10,9 +10,17 @@
 
 \*This is course from Udemy JS course and design copy right belongs to Jonas Schmedtmann.
 
+- Login information:
+
+  1.user : js, pin: 1111;
+  2.user : jd, pin: 2222;
+  1.user : stw, pin: 3333;
+  1.user : ss, pin: 4444;
+
 ### Screenshot
 
-![](./Screenshot%202023-04-20%20165524.png)
+![Before login](./beforeLogin.png)
+![after login](./afterLogin.png)
 
 ### Built with
 
