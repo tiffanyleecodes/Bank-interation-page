@@ -12,10 +12,10 @@
 
 - Login information:
 
-  1.user : js, pin: 1111;
-  2.user : jd, pin: 2222;
-  3.user : stw, pin: 3333;
-  4.user : ss, pin: 4444;
+  - 1.user : js, pin: 1111;
+  - 2.user : jd, pin: 2222;
+  - 3.user : stw, pin: 3333;
+  - 4.user : ss, pin: 4444;
 
 ### Screenshot
 
